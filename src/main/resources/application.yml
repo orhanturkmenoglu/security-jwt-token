@@ -1,0 +1,30 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/jwt-security
+    username: root
+    password: 12345
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+
+
+logging:
+  level:
+    root: debug
+
+#access-token-expiration: 24*60*60*1000   token geçerlilik süresi 24 saat
+#refresh-token-expiration: 7*24*60*60*1000 refresh token geçerlilik süresi 7 gün
+application :
+    security:
+      jwt:
+        secret-key: 49839199e53d2784f3c4bbdac59b28385911bb856f76459bfa249e55775704c4
+        access-token-expiration: 86400000
+        refresh-token-expiration: 604800000
