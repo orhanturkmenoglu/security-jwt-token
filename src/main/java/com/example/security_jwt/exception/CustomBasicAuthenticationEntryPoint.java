@@ -5,38 +5,38 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        response.setHeader("security-jwt-token-denied-error-reason", "Authorization failed");
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setHeader("security-jwt-token-error-reason", "Authentication failed");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
         // Özelleştirilmiş json dönüş türü oluşturabiliriz.
 
-        String message = (accessDeniedException !=null) &&
-                (accessDeniedException.getMessage() !=null) ? accessDeniedException.getMessage() : "Authorization failed";
+        String message = (authException !=null) &&
+                (authException.getMessage() !=null) ? authException.getMessage() : "Authentication failed";
 
 
         Map<String,Object> errorResponse = Map.of(
                 "timeStamp", LocalDateTime.now(),
-                "error",HttpStatus.FORBIDDEN.getReasonPhrase(),
-                "status",HttpStatus.FORBIDDEN.value(),
+                "error",HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                "status",HttpStatus.UNAUTHORIZED.value(),
                 "message",message,
                 "path",request.getRequestURI()
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+
     }
 }
