@@ -7,7 +7,6 @@ import com.example.security_jwt.service.MemberDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,18 +21,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@Profile("!prod")
-public class SecurityConfig {
+@Profile("prod")
+public class SecurityProdConfig {
     private final MemberDetailsService memberDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
     private final CustomLogoutHandler logoutHandler;
 
-    public SecurityConfig(MemberDetailsService memberDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter,
-                          CustomAccessDeniedHandler customAccessDeniedHandler,
-                          CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint,
-                          CustomLogoutHandler logoutHandler) {
+    public SecurityProdConfig(MemberDetailsService memberDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter,
+                              CustomAccessDeniedHandler customAccessDeniedHandler,
+                              CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint,
+                              CustomLogoutHandler logoutHandler) {
         this.memberDetailsService = memberDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
@@ -48,7 +47,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("api/auth/login", "api/auth/register", "api/auth/refresh_token/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/products/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(memberDetailsService)

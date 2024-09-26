@@ -17,11 +17,10 @@ spring:
         format_sql: true
     database: mysql
 
-    # prod geliştiriciler için yml dosyasının kaynağını belirtik.
   config:
-    import: classpath:application_prod.yml
-  profiles:
-    active: prod # #hangi profili aktif hale getirecegimiz belirtiriz
+    activate:
+      on-profile: prod #aktif hale gelmesini sağlar
+
 
 logging:
   level:

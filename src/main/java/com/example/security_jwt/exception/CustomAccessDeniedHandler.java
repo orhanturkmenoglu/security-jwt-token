@@ -29,7 +29,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
 
         Map<String,Object> errorResponse = Map.of(
-                "timeStamp", LocalDateTime.now(),
+                "timeStamp", System.currentTimeMillis(),
                 "error",HttpStatus.FORBIDDEN.getReasonPhrase(),
                 "status",HttpStatus.FORBIDDEN.value(),
                 "message",message,

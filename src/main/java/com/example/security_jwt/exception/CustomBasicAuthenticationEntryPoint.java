@@ -28,7 +28,7 @@ public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryP
 
 
         Map<String,Object> errorResponse = Map.of(
-                "timeStamp", LocalDateTime.now(),
+                "timeStamp", System.currentTimeMillis(),
                 "error",HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 "status",HttpStatus.UNAUTHORIZED.value(),
                 "message",message,
